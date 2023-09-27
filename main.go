@@ -6,11 +6,18 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
 	archiveName := os.Args[1]
 	filesToAdd := os.Args[2:]
+
+	archive_parts := strings.Split(archiveName, ".")
+	if "zip" != archive_parts[len(archive_parts)-1] {
+		fmt.Println("archive name does not contain 'zip'")
+		return
+	}
 
 	zipFile, err := os.Create(archiveName)
 	if err != nil {
