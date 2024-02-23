@@ -1,4 +1,4 @@
-module github.com/lukasmwerner/ZipAdd
+module github.com/lukasmwerner/ZipAll
 
 go 1.21.0
 
