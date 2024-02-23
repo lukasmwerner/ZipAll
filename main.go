@@ -15,6 +15,7 @@ import (
 )
 
 var git = flag.Bool("git", false, "follow the gitignore")
+var verbose = flag.Bool("v", false, "verbose command output")
 
 func main() {
 	flag.Parse()
@@ -46,7 +47,9 @@ func main() {
 				return nil
 			}
 			if gitignore.MatchesPath(path) {
-				log.Printf("skipping: %s\n", path)
+				if *verbose {
+					log.Printf("skipping: %s\n", path)
+				}
 				return nil
 			}
 
@@ -74,6 +77,10 @@ func main() {
 				return err
 			}
 			_, err = io.Copy(writer, file)
+
+			if *verbose {
+				log.Printf("adding: %s\n", path)
+			}
 
 			return nil
 		})
