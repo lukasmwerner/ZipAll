@@ -13,7 +13,7 @@ $ go install github.com/lukasmwerner/ZipAll@v0.0.3
 Usage:
 
 ```bash
-$ zipadd Archive.zip file1 file2 file3
+$ ZipAll Archive.zip file1 file2 file3
 ```
 
 ## Gitignore usage
@@ -22,5 +22,5 @@ when there is a gitignore file in the local directory it will use the gitignore
 file to ignore those files and then zip everything else Usage:
 
 ```bash
-$ zipadd -git Archive.zip
+$ ZipAll -git Archive.zip
 ```
