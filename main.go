@@ -8,10 +8,9 @@ import (
 	"io/fs"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
-	ignore "github.com/sabhiram/go-gitignore"
+	"github.com/iriri/minimal/gitignore"
 )
 
 var git = flag.Bool("git", false, "follow the gitignore")
@@ -37,19 +36,13 @@ func main() {
 	defer zipWriter.Close()
 
 	if *git {
-		gitignore, err := ignore.CompileIgnoreFile(".gitignore")
+		ignorelist, err := gitignore.FromGit()
 		if err != nil {
 			log.Panicln(err)
 		}
 
-		filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
-			if path == ".git" || path == zipFile.Name() {
-				return nil
-			}
-			if gitignore.MatchesPath(path) {
-				if *verbose {
-					log.Printf("skipping: %s\n", path)
-				}
+		every := func(path string) error {
+			if path == ".gitignore" || path == ".git" || path == zipFile.Name() || path == "." {
 				return nil
 			}
 
@@ -83,6 +76,13 @@ func main() {
 			}
 
 			return nil
+		}
+
+		ignorelist.Walk(".", func(path string, info fs.FileInfo, err error) error {
+			if info.IsDir() {
+				return nil
+			}
+			return every(path)
 		})
 
 		return
