@@ -90,7 +90,9 @@ func main() {
 
 	filesToAdd := flag.Args()[2:]
 	for _, filename := range filesToAdd {
-		fmt.Println(filename)
+		if *verbose {
+			log.Printf("adding: %s\n", filename)
+		}
 
 		file, err := os.Open(filename)
 		if err != nil {
